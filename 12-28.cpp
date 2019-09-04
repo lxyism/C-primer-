@@ -1,3 +1,5 @@
+
+//å¯ä»¥è¿›è¡Œæ–‡ä»¶ä¸­å¯¹å…³é”®å­—è¿›è¡ŒæŸ¥æ‰¾
 #include<iostream>
 #include<fstream>
 #include<sstream>
@@ -10,8 +12,8 @@
 
 using namespace std;
 using line_no = vector<string>::size_type;
-vector<string> file;  //ÎÄ¼şÃ¿ĞĞÄÚÈİ
-map<string, set<line_no>> wm;    //µ¥´Êµ½ĞĞºÅsetµÄÓ³Éä
+vector<string> file;  //æ–‡ä»¶æ¯è¡Œå†…å®¹
+map<string, set<line_no>> wm;    //å•è¯åˆ°è¡Œå·setçš„æ˜ å°„
 
 string cleanup_str(const string &word)
 {
@@ -27,15 +29,15 @@ string cleanup_str(const string &word)
 void input_text(ifstream &is)
 {
     string text;
-    while (getline(is, text))    //¶ÔÎÄ¼şÖĞÃ¿Ò»ĞĞ
+    while (getline(is, text))    //å¯¹æ–‡ä»¶ä¸­æ¯ä¸€è¡Œ
     {
-        file.push_back(text);   //±£´æ´ËĞĞÎÄ±¾
-        int n = file.size() - 1;  //µ±Ç°ĞĞºÅ
-        istringstream line(text);  //½«ĞĞÎÄ±¾·Ö½âÎªµ¥´Ê
+        file.push_back(text);   //ä¿å­˜æ­¤è¡Œæ–‡æœ¬
+        int n = file.size() - 1;  //å½“å‰è¡Œå·
+        istringstream line(text);  //å°†è¡Œæ–‡æœ¬åˆ†è§£ä¸ºå•è¯
         string word;
         while (line >> word){
-            //½«µ±Ç°ĞĞºÅ²åÈëµ½ÆäĞĞºÅsetÖĞ
-            //Èç¹ûµ¥´Ê²»ÔÚwmÖĞ£¬ÒÔÖ®ÎªÏÂ±êÔÚwmÖĞÌí¼ÓÒ»Ïî
+            //å°†å½“å‰è¡Œå·æ’å…¥åˆ°å…¶è¡Œå·setä¸­
+            //å¦‚æœå•è¯ä¸åœ¨wmä¸­ï¼Œä»¥ä¹‹ä¸ºä¸‹æ ‡åœ¨wmä¸­æ·»åŠ ä¸€é¡¹
             wm[cleanup_str(word)].insert(n);
         }
     }
@@ -43,43 +45,43 @@ void input_text(ifstream &is)
 
 ostream &query_and_print(const string &sought, ostream & os)
 {
-    //Ê¹ÓÃfind¶ø²»ÊÇÏÂ±êÔËËã·ûÀ´²éÕÒµ¥´Ê£¬±ÜÃâ½«µ¥´ÊÌí¼Óµ½wmÖĞ£¡
+    //ä½¿ç”¨findè€Œä¸æ˜¯ä¸‹æ ‡è¿ç®—ç¬¦æ¥æŸ¥æ‰¾å•è¯ï¼Œé¿å…å°†å•è¯æ·»åŠ åˆ°wmä¸­ï¼
     auto loc = wm.find(sought);
     if (loc == wm.end())
     {
-        os<<sought<<"³öÏÖÁË0´Î"<<endl;
+        os<<sought<<"å‡ºç°äº†0æ¬¡"<<endl;
     }
     else 
     {
-        auto lines = loc->second;  //ĞĞºÅset
-        os<<sought<<"³öÏÖÁË"<<lines.size()<<"´Î"<<endl;
-        for (auto num:lines)    //´òÓ¡µ¥´Ê³öÏÖµÄÃ¿Ò»ĞĞ
-            os<<"\t(µÚ"<<num+1<<"ĞĞ£©"<<*(file.begin() + num)<<endl;
+        auto lines = loc->second;  //è¡Œå·set
+        os<<sought<<"å‡ºç°äº†"<<lines.size()<<"æ¬¡"<<endl;
+        for (auto num:lines)    //æ‰“å°å•è¯å‡ºç°çš„æ¯ä¸€è¡Œ
+            os<<"\t(ç¬¬"<<num+1<<"è¡Œï¼‰"<<*(file.begin() + num)<<endl;
     }
     return os;
 }
 void runQueries(ifstream &infile)
 {
-    //infileÊÇÒ»¸öifstream£¬Ö¸ÏòÎÒÃÇÒª²éÑ¯µÄÎÄ¼ş
-    input_text(infile);    //¶ÁÈëÎÄ±¾²¢½¨Á¢²éÑ¯map
-    //ÓëÓÃ»§½»»¥£ºÌáÊ¾ÓÃ»§ÊäÈëÒª²éÑ¯µÄµ¥´Ê£¬²¢Íê³É²éÑ¯²¢´òÓ¡½á¹û
+    //infileæ˜¯ä¸€ä¸ªifstreamï¼ŒæŒ‡å‘æˆ‘ä»¬è¦æŸ¥è¯¢çš„æ–‡ä»¶
+    input_text(infile);    //è¯»å…¥æ–‡æœ¬å¹¶å»ºç«‹æŸ¥è¯¢map
+    //ä¸ç”¨æˆ·äº¤äº’ï¼šæç¤ºç”¨æˆ·è¾“å…¥è¦æŸ¥è¯¢çš„å•è¯ï¼Œå¹¶å®ŒæˆæŸ¥è¯¢å¹¶æ‰“å°ç»“æœ
     while(true)
     {
         cout<<"enter word to look for, or q to quit:";
         string s;
-        //ÈôÓöµ½ÎÄ¼şÎ²»òÓÃ»§ÊäÈëÁËqÊ±Ñ­»·ÖÕÖ¹
+        //è‹¥é‡åˆ°æ–‡ä»¶å°¾æˆ–ç”¨æˆ·è¾“å…¥äº†qæ—¶å¾ªç¯ç»ˆæ­¢
         if(!(cin>>s) || s == "q") break;
-        //Ö¸Ïò²éÑ¯²¢´òÓ¡´íÎó
+        //æŒ‡å‘æŸ¥è¯¢å¹¶æ‰“å°é”™è¯¯
         query_and_print(s, cout)<<endl;
     }
 }
 
-//³ÌĞò½ÓÊÕÎ¨Ò»µÄÃüÁîĞĞ²ÎÊı£¬±íÊ¾ÎÄ±¾ÎÄ¼şÃû
+//ç¨‹åºæ¥æ”¶å”¯ä¸€çš„å‘½ä»¤è¡Œå‚æ•°ï¼Œè¡¨ç¤ºæ–‡æœ¬æ–‡ä»¶å
 int main(int argc, char **argv)
 {
-    //´ò¿ªÒª²éÑ¯µÄÎÄ¼ş
+    //æ‰“å¼€è¦æŸ¥è¯¢çš„æ–‡ä»¶
     ifstream infile;
-    //´ò¿ªÎÄ¼şÊ§°Ü£¬³ÌĞòÒì³£ÍË³ö
+    //æ‰“å¼€æ–‡ä»¶å¤±è´¥ï¼Œç¨‹åºå¼‚å¸¸é€€å‡º
     if (argc < 2|| !(infile.open(argv[1]), infile))
     {
         cerr<<"No input file!"<<endl;
